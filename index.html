@@ -64,6 +64,14 @@ footer :focus-visible{outline-color:var(--yellow)}
 .about p{margin:0;font-size:clamp(20px,3.05vw,61px);line-height:1.33;letter-spacing:-.01em;max-width:18em}
 .about .rule{height:1px;background:var(--ink);margin:clamp(12px,1.6vw,32px) calc(var(--gutter)*-1) clamp(40px,6.6vw,132px) calc(clamp(16px,2.2vw,44px)*-1)}
 
+.live{background:var(--yellow);color:var(--ink);padding-block:clamp(28px,3.6vw,72px);padding-inline:var(--gutter);display:flex;flex-direction:column;gap:clamp(14px,1.8vw,36px)}
+.live h2{margin:0;display:flex;flex-wrap:wrap;justify-content:space-between;gap:0 24px;font:500 clamp(26px,4.6vw,92px)/1.05 var(--body);letter-spacing:-.02em;text-transform:uppercase}
+.player{position:relative;display:grid;place-items:center;width:100%;aspect-ratio:16/9;background:var(--ink);overflow:hidden}
+.player img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.player svg{position:relative;width:clamp(56px,8vw,120px);height:auto;fill:var(--yellow);transition:transform .2s}
+.player:hover svg{transform:scale(1.1)}
+.player iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+
 footer{background:var(--brown);color:var(--cream);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:24px;padding-block:clamp(28px,2.6vw,52px);padding-inline:clamp(16px,2.6vw,52px)}
 .contact{display:flex;flex-direction:column;gap:clamp(14px,1.2vw,24px)}
 .contact img{width:clamp(180px,16vw,320px);height:auto}
@@ -140,6 +148,14 @@ html.custom a,html.custom button{cursor:none!important}
 <section class="work" id="work" aria-label="Work">
   <ul class="filters" id="filters"></ul>
   <div class="grid" id="grid"></div>
+</section>
+
+<section class="live" id="live">
+  <h2><span>Live drawing</span><span>Norish Salon</span></h2>
+  <a class="player" id="player" href="https://youtu.be/qF8ndJAAwN0" target="_blank" rel="noopener" aria-label="Play the live drawing video from Norish Salon">
+    <img src="https://i.ytimg.com/vi/qF8ndJAAwN0/maxresdefault.jpg" alt="" onerror="this.remove()">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3l15 9-15 9z"/></svg>
+  </a>
 </section>
 
 <footer>
@@ -251,6 +267,23 @@ var WORK={"Personal":[{"f":"personal-00.webp","a":"Alfredo poster: a man in a gi
     li.appendChild(b);filters.appendChild(li);
   });
   show('Personal');
+})();
+
+(function(){
+  // The Claude preview cannot embed YouTube, so there the player stays a link to the video.
+  if(window.claude)return;
+  var player=document.getElementById('player');
+  player.addEventListener('click',function(e){
+    e.preventDefault();
+    var frame=document.createElement('iframe');
+    frame.src='https://www.youtube-nocookie.com/embed/qF8ndJAAwN0?autoplay=1';
+    frame.title='Live drawing at Norish Salon';
+    frame.allow='autoplay; encrypted-media; picture-in-picture; fullscreen';
+    frame.referrerPolicy='strict-origin-when-cross-origin';
+    frame.allowFullscreen=true;
+    var box=document.createElement('div');box.className='player';box.appendChild(frame);
+    player.replaceWith(box);
+  });
 })();
 
 (function(){
